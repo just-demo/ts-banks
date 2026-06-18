@@ -1,0 +1,8 @@
+.router-link:hover {
+    text-decoration: none;
+}
+
+.router-link-active,
+.router-link-active:hover {
+    text-decoration: underline;
+}

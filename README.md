@@ -9,4 +9,4 @@ npm install
 npm run dev
 ```
 
-See link in the output
+Go to http://localhost:5173

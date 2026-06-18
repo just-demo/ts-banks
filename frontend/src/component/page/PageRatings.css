@@ -1,0 +1,37 @@
+table.ratings {
+  width:100%;
+}
+
+th {
+  text-align: center;
+  padding: 0 7px;
+}
+
+table.ratings > tbody > tr:not(.details):hover {
+  cursor: pointer;
+}
+
+table.ratings > tbody > tr:not(.details):hover td:nth-child(-n+2) {
+  background-color: #ddd;
+}
+
+td.rating div {
+  text-align: center;
+}
+
+td.closed {
+  background-color: #ddd;
+}
+
+td.open {
+  border-right-width: 3px;
+  border-right-color: green;
+}
+
+td.issue div {
+  background: repeating-linear-gradient(45deg, transparent, transparent 1px, red 1px, red 5px);
+}
+
+td.issue div:hover {
+  background: repeating-linear-gradient(45deg, red, red 1px, transparent 1px, transparent 5px);
+}

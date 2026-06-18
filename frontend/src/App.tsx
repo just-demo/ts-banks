@@ -1,22 +1,16 @@
-import {useState} from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import {Component} from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import {HashRouter} from 'react-router-dom';
+import ToolBar from "./component/ToolBar";
 
-  return (
-    <section id="center">
-      <img src={reactLogo} className="framework" alt="React logo"/>
-      <button
-        type="button"
-        className="counter"
-        onClick={() => setCount((count) => count + 1)}
-      >
-        Count is {count}
-      </button>
-    </section>
-  )
+class App extends Component {
+    render() {
+        return (
+            <HashRouter>
+                <ToolBar/>
+            </HashRouter>
+        );
+    }
 }
 
-export default App
+export default App;
