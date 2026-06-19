@@ -3,8 +3,6 @@ import arrays from '../arrays';
 import assert from '../assert';
 import BankNameLookup from '../bank-name-lookup';
 import SourceNbuAPI from './source-nbu-api';
-import SourceNbuPDF from './source-nbu-pdf';
-import SourceNbuUI from './source-nbu-ui';
 import SourceFund from './source-fund';
 import SourceMinfin from './source-minfin';
 import type Audit from './audit';
@@ -20,8 +18,9 @@ class Source {
             // dbf: new SourceNbuDBF(),
             // TODO: introduce audit.newBranch() method so that each source will not need to care about uniqueness of item names being audited
             api: new SourceNbuAPI(audit),
-            nbu: new SourceNbuUI(audit),
-            pdf: new SourceNbuPDF(audit),
+            // TODO: fix the sources if possible
+            // nbu: new SourceNbuUI(audit),
+            // pdf: new SourceNbuPDF(audit),
             fund: new SourceFund(audit),
             minfin: new SourceMinfin(audit)
         };

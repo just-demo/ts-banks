@@ -16,6 +16,7 @@ class SourceNbuUI {
         this.audit = audit.branch('nbu-ui', 4);
     }
 
+    // TODO: fix it https://bank.gov.ua/ua/supervision/institutions?page=1&perPage=100&search=&status=1&uid=&suid=&date_from=&date_to=&fb_date_from=&fb_date_to=
     // Банківський нагляд -> Реєстрація та ліцензування -> Довідник банків -> Повний перелік банківських установ:
     // https://bank.gov.ua/control/bankdict/banks
     // Банківський нагляд -> Реорганізація, припинення та ліквідація:

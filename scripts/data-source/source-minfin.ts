@@ -47,7 +47,7 @@ class SourceMinfin {
         this.audit.start('rating', dates.length);
         const allDateRatings = await mapAsync(dates, async (date: string) => {
             const dateHtml = await cache.read('minfin/ratings/' + date, 'https://minfin.com.ua/ua/banks/rating/?date=' + date);
-            const dateRatings = regex.findManyKeyValue(dateHtml, /data-id="(.+?)"[\S\s]+?data-title="Загальний рейтинг"><span.*?>(.+?)<\/span>/g);
+            const dateRatings = regex.findManyKeyValue(dateHtml, /data-id="(.+?)"[\S\s]+?data-title="Загальний рейтинг"\s*>\s*<span[\s\S]*?>(.+?)<\/span>/g);
             this.audit.end('rating');
             return {
                 date: date,

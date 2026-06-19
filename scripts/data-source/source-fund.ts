@@ -42,11 +42,11 @@ export default SourceFund;
 
 async function readActiveBanks(audit: Audit): Promise<any[]> {
     audit.start('banks-active');
-    const html = await cache.read('fund/banks-active', 'http://www.fg.gov.ua/uchasnyky-fondu');
-    const banks = regex.findManyObjects(html, /<tr.*?>\s+?<td.*?>(.*?)<\/td>\s+?<td.*?>(.*?)<\/td>\s+?<td.*?>(.*?)<\/td>\s+?<td.*?>(.*?)<\/td>\s+?<td.*?>(.*?)<\/td>\s+?<td.*?>(.*?)<\/td>\s+?<td.*?>([\S\s]*?)<\/td>\s+?<\/tr>/g, {
-        name: 2,
-        date: 4,
-        site: 7
+    const html = await cache.read('fund/banks-active', 'https://www.fg.gov.ua/pro-fond/banki-uchasniki-fondu');
+    const banks = regex.findManyObjects(html, /<tr[^>]*>\s*<td[^>]*>\s*\d+\s*<\/td>\s*<td[^>]*>[\s\S]*?<\/td>\s*<td[^>]*>([\s\S]*?)<\/td>\s*(?:<td[^>]*>[\s\S]*?<\/td>\s*){3}<td[^>]*>([\s\S]*?)<\/td>\s*(?:<td[^>]*>[\s\S]*?<\/td>\s*){2}<td[^>]*>([\s\S]*?)<\/td>\s*<\/tr>/g, {
+        name: 1,
+        date: 2,
+        site: 3
     }).map((bank: any) => ({
         name: names.extractBankPureName(bank.name),
         start: dates.format(bank.date),
@@ -58,6 +58,7 @@ async function readActiveBanks(audit: Audit): Promise<any[]> {
     return banks;
 }
 
+// TODO: fix it https://www.fg.gov.ua/banki-v-upravlinni-fondu/banki-likvidovani-fondom and others
 async function readInactiveBanks(audit: Audit): Promise<any[]> {
     audit.start('banks-not-paying');
     const html = await cache.read('fund/banks-not-paying', 'http://www.fg.gov.ua/not-paying');
