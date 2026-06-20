@@ -1,16 +1,16 @@
-import iconv from 'iconv-lite';
+export interface FetchInit {
+    method?: string;
+    headers?: Record<string, string>;
+    body?: string;
+}
 
 export default {
-    async read(url: string, encoding?: string | null): Promise<string | Buffer> {
+    async read(url: string, init?: FetchInit): Promise<string> {
         const response = await fetch(url, {
-            // TODO: find a way to disable cors, this one does not work in browser
-            // mode: 'no-cors',
-            headers: {'User-Agent': 'javascript'}
+            method: init?.method ?? 'GET',
+            headers: {'User-Agent': 'javascript', ...(init?.headers ?? {})},
+            body: init?.body
         });
-        const buffer = Buffer.from(await response.arrayBuffer());
-        if (encoding === null) {
-            return buffer;
-        }
-        return encoding ? iconv.decode(buffer, encoding) : buffer.toString('utf8');
+        return response.text();
     },
 };

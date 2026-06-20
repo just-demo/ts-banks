@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as path from 'path';
 import files from './files';
 import urls from './urls';
+import type {FetchInit} from './urls';
 
 export default {
     // debug just for troubleshooting
@@ -13,12 +14,12 @@ export default {
         });
     },
 
-    async read(file: string, url: string, encoding?: string): Promise<any> {
+    async read(file: string, url: string, init?: FetchInit): Promise<any> {
         file = filePath(file);
         if (await files.exists(file)) {
             return perform('READ', file, () => files.read(file));
         }
-        const data = await perform('GET', url, () => urls.read(url, encoding));
+        const data = await perform(init?.method ?? 'GET', url, () => urls.read(url, init));
         return files.write(file, data);
     },
 
