@@ -1,24 +1,34 @@
 import {Component} from 'react';
 import _ from 'lodash';
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Select, {type SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
-const scaleButton = {
+const styleScaleButton = {
     margin: 5,
     width: 35,
     height: 35,
     fontSize: 20
 };
 
-class Scale extends Component<any, any> {
-    min: any;
-    max: any;
+interface ScaleProps {
+    value: number;
+    values: number[];
+    onChange: (value: number) => void;
+}
 
-    constructor(props: any) {
+interface ScaleState {
+    value: number;
+}
+
+class Scale extends Component<ScaleProps, ScaleState> {
+    min: number;
+    max: number;
+
+    constructor(props: ScaleProps) {
         super(props);
-        this.min = _.min(this.props.values);
-        this.max = _.max(this.props.values);
+        this.min = _.min(this.props.values) ?? 0;
+        this.max = _.max(this.props.values) ?? 0;
         this.state = {
             value: this.props.value
         }
@@ -27,7 +37,7 @@ class Scale extends Component<any, any> {
     render() {
         return (
             <div>
-                <button style={scaleButton} onClick={this.handleScaleDown}>-</button>
+                <button style={styleScaleButton} onClick={this.handleScaleDown}>-</button>
                 <FormControl variant="outlined" style={{marginTop: 5}}>
                     <Select value={this.state.value} onChange={this.handleScaleSelect}
                             MenuProps={{PaperProps: {style: {maxHeight: 300}}}}>
@@ -36,24 +46,24 @@ class Scale extends Component<any, any> {
                         ))}
                     </Select>
                 </FormControl>
-                <button style={scaleButton} onClick={this.handleScaleUp}>+</button>
+                <button style={styleScaleButton} onClick={this.handleScaleUp}>+</button>
             </div>
         );
     }
 
     handleScaleDown = () => {
-        this.setValue(_.max(this.props.values.filter((value: number) => value < this.state.value)) || this.min);
+        this.setValue(_.max(this.props.values.filter(value => value < this.state.value)) || this.min);
     };
 
     handleScaleUp = () => {
-        this.setValue(_.min(this.props.values.filter((value: number) => value > this.state.value)) || this.max);
+        this.setValue(_.min(this.props.values.filter(value => value > this.state.value)) || this.max);
     };
 
-    handleScaleSelect = (event: any) => {
-        this.setValue(event.target.value);
+    handleScaleSelect = (event: SelectChangeEvent<number>) => {
+        this.setValue(Number(event.target.value));
     };
 
-    setValue(value: any) {
+    setValue(value: number) {
         this.setState({value: value});
         this.props.onChange(value);
     }
