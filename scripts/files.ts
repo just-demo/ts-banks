@@ -10,10 +10,6 @@ export default {
         return data;
     },
 
-    writeRaw(file: string, data: Buffer): Promise<string | Buffer> {
-        return this.write(file, data, null);
-    },
-
     writeJson(file: string, obj: unknown): Promise<string | Buffer> {
         return this.write(file, JSON.stringify(obj, null, 2));
     },
@@ -21,10 +17,6 @@ export default {
     async read(file: string, encoding?: string | null): Promise<string | Buffer> {
         const data = await fs.readFile(file);
         return encoding === null ? data : iconv.decode(data, encoding || 'utf8');
-    },
-
-    readRaw(file: string): Promise<Buffer> {
-        return this.read(file, null) as Promise<Buffer>;
     },
 
     async exists(file: string): Promise<boolean> {

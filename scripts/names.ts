@@ -28,10 +28,6 @@ export default {
             .replace(/ БАНК$/, '');
     },
 
-    removeTags(name: string): string {
-        return name.replace(/<[^>]*>/g, '');
-    },
-
     // TODO: move to a better place?
     // Just for predictable sorting taking into account asynchrony being introduced
     compareNames(a: SourceBank, b: SourceBank): number {

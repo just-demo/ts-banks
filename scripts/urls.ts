@@ -13,8 +13,4 @@ export default {
         }
         return encoding ? iconv.decode(buffer, encoding) : buffer.toString('utf8');
     },
-
-    download(url: string): Promise<Buffer> {
-        return this.read(url, null) as Promise<Buffer>;
-    }
 };
