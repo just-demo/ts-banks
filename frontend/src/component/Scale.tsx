@@ -43,7 +43,7 @@ function Scale({value, values, onChange}: ScaleProps) {
         <div>
             <button style={styleScaleButton} onClick={handleScaleDown}>-</button>
             <FormControl variant="outlined" style={{marginTop: 5}}>
-                <Select value={current} onChange={handleScaleSelect} size="small" sx={{height: 35}}
+                <Select value={current} onChange={handleScaleSelect} size="small" sx={{height: 35, width: 80}}
                         MenuProps={{PaperProps: {style: {maxHeight: 300}}}}>
                     {_.range(min, max + 1).map(value => (
                         <MenuItem key={value} value={value}>{value}</MenuItem>

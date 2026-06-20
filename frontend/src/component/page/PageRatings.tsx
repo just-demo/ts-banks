@@ -65,13 +65,13 @@ function classForCell(bank: RatingBank, date: string) {
 }
 
 function PageRatings() {
-    const [scale, setScale] = useState(1);
+    const [scale, setScale] = useState(100);
     const [bankSelected, setBankSelected] = useState<string | null>(null);
     const [collapsedYears, setCollapsedYears] = useState<Record<string, boolean>>({});
     const [banks, setBanks] = useState<BankData[]>([]);
     const [ratings, setRatings] = useState<Ratings>({});
     const [filterActive, setFilterActive] = useState(false);
-    const [perYear, setPerYear] = useState(false);
+    const [perYear, setPerYear] = useState(true);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -179,7 +179,7 @@ function PageRatings() {
         <div>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 5}}>
                     <FormControl variant="outlined" style={{marginRight: 100}}>
-                        <Select value={perYear ? 'year' : 'quarter'} size="small" sx={{height: 35}}
+                        <Select value={perYear ? 'year' : 'quarter'} size="small" sx={{height: 35, width: 120}}
                                 onChange={(event: SelectChangeEvent) => setPerYear(event.target.value === 'year')}>
                             <MenuItem value="quarter">Квартал</MenuItem>
                             <MenuItem value="year">Рік</MenuItem>
