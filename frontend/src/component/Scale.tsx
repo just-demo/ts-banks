@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import {useMemo, useState} from 'react';
 import _ from 'lodash';
 import FormControl from "@mui/material/FormControl";
 import Select, {type SelectChangeEvent} from "@mui/material/Select";
@@ -17,56 +17,42 @@ interface ScaleProps {
     onChange: (value: number) => void;
 }
 
-interface ScaleState {
-    value: number;
-}
+function Scale({value, values, onChange}: ScaleProps) {
+    const [current, setCurrent] = useState(value);
+    const min = useMemo(() => _.min(values) ?? 0, [values]);
+    const max = useMemo(() => _.max(values) ?? 0, [values]);
 
-class Scale extends Component<ScaleProps, ScaleState> {
-    min: number;
-    max: number;
-
-    constructor(props: ScaleProps) {
-        super(props);
-        this.min = _.min(this.props.values) ?? 0;
-        this.max = _.max(this.props.values) ?? 0;
-        this.state = {
-            value: this.props.value
-        }
-    }
-
-    render() {
-        return (
-            <div>
-                <button style={styleScaleButton} onClick={this.handleScaleDown}>-</button>
-                <FormControl variant="outlined" style={{marginTop: 5}}>
-                    <Select value={this.state.value} onChange={this.handleScaleSelect}
-                            MenuProps={{PaperProps: {style: {maxHeight: 300}}}}>
-                        {_.range(this.min, this.max + 1).map(value => (
-                            <MenuItem key={value} value={value}>{value}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <button style={styleScaleButton} onClick={this.handleScaleUp}>+</button>
-            </div>
-        );
-    }
-
-    handleScaleDown = () => {
-        this.setValue(_.max(this.props.values.filter(value => value < this.state.value)) || this.min);
+    const setValue = (next: number) => {
+        setCurrent(next);
+        onChange(next);
     };
 
-    handleScaleUp = () => {
-        this.setValue(_.min(this.props.values.filter(value => value > this.state.value)) || this.max);
+    const handleScaleDown = () => {
+        setValue(_.max(values.filter(value => value < current)) || min);
     };
 
-    handleScaleSelect = (event: SelectChangeEvent<number>) => {
-        this.setValue(Number(event.target.value));
+    const handleScaleUp = () => {
+        setValue(_.min(values.filter(value => value > current)) || max);
     };
 
-    setValue(value: number) {
-        this.setState({value: value});
-        this.props.onChange(value);
-    }
+    const handleScaleSelect = (event: SelectChangeEvent<number>) => {
+        setValue(Number(event.target.value));
+    };
+
+    return (
+        <div>
+            <button style={styleScaleButton} onClick={handleScaleDown}>-</button>
+            <FormControl variant="outlined" style={{marginTop: 5}}>
+                <Select value={current} onChange={handleScaleSelect}
+                        MenuProps={{PaperProps: {style: {maxHeight: 300}}}}>
+                    {_.range(min, max + 1).map(value => (
+                        <MenuItem key={value} value={value}>{value}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+            <button style={styleScaleButton} onClick={handleScaleUp}>+</button>
+        </div>
+    );
 }
 
 export default Scale;
