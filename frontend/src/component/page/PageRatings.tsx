@@ -177,13 +177,13 @@ function PageRatings() {
     return (
         <div>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 5}}>
-                    <Scale value={scale} values={[1, 2, 5, 10, 100]}
-                           onChange={(scale: number) => setScale(scale)}/>
                     <FormControlLabel
                         control={<Checkbox checked={perYear}
                                            onChange={event => setPerYear(event.target.checked)}
                                            color="primary"/>}
-                        label="Рік"/>
+                        label="Рік" style={{marginRight: 100}}/>
+                    <Scale value={scale} values={[1, 2, 5, 10, 100]}
+                           onChange={(scale: number) => setScale(scale)}/>
             </div>
             <table className="ratings">
                 <tbody>
