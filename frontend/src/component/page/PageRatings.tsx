@@ -12,8 +12,9 @@ import Search from "../Search";
 import ActiveIndicator from "../ActiveIndicator";
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
 import ChevronRight from "@mui/icons-material/ChevronRight";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import Select, {type SelectChangeEvent} from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import type {Bank as BankData, Ratings, RatingBank} from "../../model";
 
 function getMostRelevantBankName(bank: BankData) {
@@ -177,11 +178,13 @@ function PageRatings() {
     return (
         <div>
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 5}}>
-                    <FormControlLabel
-                        control={<Checkbox checked={perYear}
-                                           onChange={event => setPerYear(event.target.checked)}
-                                           color="primary"/>}
-                        label="Рік" style={{marginRight: 100}}/>
+                    <FormControl variant="outlined" style={{marginRight: 100}}>
+                        <Select value={perYear ? 'year' : 'quarter'} size="small" sx={{height: 35}}
+                                onChange={(event: SelectChangeEvent) => setPerYear(event.target.value === 'year')}>
+                            <MenuItem value="quarter">Квартал</MenuItem>
+                            <MenuItem value="year">Рік</MenuItem>
+                        </Select>
+                    </FormControl>
                     <Scale value={scale} values={[1, 2, 5, 10, 100]}
                            onChange={(scale: number) => setScale(scale)}/>
             </div>
