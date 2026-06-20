@@ -1,15 +1,15 @@
-export interface FetchInit {
+export interface RequestSpec {
     method?: string;
     headers?: Record<string, string>;
     body?: string;
 }
 
 export default {
-    async read(url: string, init?: FetchInit): Promise<string> {
+    async read(url: string, spec?: RequestSpec): Promise<string> {
         const response = await fetch(url, {
-            method: init?.method ?? 'GET',
-            headers: {'User-Agent': 'javascript', ...(init?.headers ?? {})},
-            body: init?.body
+            method: spec?.method ?? 'GET',
+            headers: {'User-Agent': 'javascript', ...(spec?.headers ?? {})},
+            body: spec?.body
         });
         return response.text();
     },

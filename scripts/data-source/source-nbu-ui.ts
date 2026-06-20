@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import promiseRetry from 'promise-retry';
 import names from '../names';
 import cache from '../cache';
 import dates from '../dates';
@@ -7,8 +6,6 @@ import assert from '../assert';
 import regex from '../regex';
 import type Audit from './audit';
 import type {SourceBank} from '../model';
-
-const SEARCH_URL = 'https://bank.gov.ua/supervision/institutions1';
 
 class SourceNbuUI {
     private audit: Audit;
@@ -19,7 +16,6 @@ class SourceNbuUI {
 
     // Банківський нагляд -> Реєстрація та ліцензування -> Перелік банків:
     // https://bank.gov.ua/ua/supervision/institutions
-    // The page ignores GET query params; search results come from a POST to /supervision/institutions1.
     async getBanks(): Promise<SourceBank[]> {
         const allBanks = await Promise.all([
             readBanks(this.audit, 'active', 1, true),
@@ -53,24 +49,11 @@ async function readBanks(audit: Audit, label: string, status: number, active: bo
 }
 
 async function readPage(label: string, status: number, page: number): Promise<string> {
-    return promiseRetry(async (retry, number) => {
-        const cacheFile = `nbu/banks/${label}/${page}`;
-        try {
-            if (number > 1) {
-                await cache.delete(cacheFile);
-            }
-            const html: string = await cache.read(cacheFile, SEARCH_URL, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
-                body: `page=${page}&perPage=100&search=&status=${status}&type%5B%5D=1&uid=&suid=&date_from=&date_to=&fb_date_from=&fb_date_to=`
-            });
-            if (html.includes('503 Service Temporarily Unavailable')) {
-                throw 'Error response: 503';
-            }
-            return html;
-        } catch (error) {
-            return retry(error);
-        }
+    // The page ignores GET query params; search results come from a POST to /supervision/institutions1, this is how the page actually works that is why POST is used here
+    return cache.read(`nbu/banks/${label}/${page}`, 'https://bank.gov.ua/supervision/institutions1', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
+        body: `page=${page}&perPage=100&search=&status=${status}&type%5B%5D=1&uid=&suid=&date_from=&date_to=&fb_date_from=&fb_date_to=`
     });
 }
 
