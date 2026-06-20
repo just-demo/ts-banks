@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import {Link, Routes, Route, Navigate, useLocation} from 'react-router-dom';
 import PageRatings from "./page/PageRatings";
 import PageBanks from "./page/PageBanks";
-import PageDBF from "./page/PageDBF";
 import PageLogs from "./page/PageLogs";
 import UserMenu from "./UserMenu";
 import PageRefresh from "./page/PageRefresh";
@@ -21,7 +20,6 @@ import Chart from '@mui/icons-material/EqualizerSharp';
 import Bank from '@mui/icons-material/AccountBalance';
 import Log from '@mui/icons-material/LibraryBooks';
 import Refresh from '@mui/icons-material/Sync';
-import Database from '@mui/icons-material/School';
 import './ToolBar.css';
 
 interface NavLink {
@@ -46,11 +44,6 @@ const links: NavLink[] = [{
     title: 'Банки',
     access: 1,
     icon: <Bank style={{transform: 'scale(0.9)'}}/>
-}, {
-    path: '/dbf',
-    title: 'База НБУ',
-    access: 1,
-    icon: <Database style={{marginRight: 3}}/>
 }, {
     path: '/refresh',
     title: 'Оновлення',
@@ -78,9 +71,10 @@ function ToolBar() {
             <AppBar position="static">
                 <Toolbar>
                     {links.filter(link => link.access <= access).map(link => (
-                        <Link key={link.path} to={link.path} style={{color: 'white'}} className={classNames('router-link', {
-                            'router-link-active': link.path === selectedPath
-                        })}><Button style={{
+                        <Link key={link.path} to={link.path} style={{color: 'white'}}
+                              className={classNames('router-link', {
+                                  'router-link-active': link.path === selectedPath
+                              })}><Button style={{
                             color: 'white',
                             paddingRight: 10
                         }}>{link.icon}{link.title}</Button></Link>
@@ -91,7 +85,8 @@ function ToolBar() {
                         textTransform: 'uppercase',
                         color: 'skyblue'
                     }}>
-                        Рейтинг банків України за версією сайту <ExternalLink url="https://minfin.com.ua/ua/banks/rating" title="Мінфін" style={{color: 'skyblue'}}/>
+                        Рейтинг банків України за версією сайту <ExternalLink
+                        url="https://minfin.com.ua/ua/banks/rating" title="Мінфін" style={{color: 'skyblue'}}/>
                     </Typography>
                     <UserMenu selected={access} onSelect={setAccess}/>
                 </Toolbar>
@@ -102,7 +97,6 @@ function ToolBar() {
                     <Route path="/" element={<PageRatings/>}/>
                     <Route path="/chart" element={<PageCharts/>}/>
                     <Route path="/banks" element={<PageBanks/>}/>
-                    <Route path="/dbf" element={<PageDBF/>}/>
                     <Route path="/refresh" element={<PageRefresh/>}/>
                     <Route path="/logs" element={<PageLogs/>}/>
                 </Routes>

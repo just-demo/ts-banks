@@ -11,14 +11,12 @@ export interface Bank {
     dateIssue: BySource<string>;
     site: BySource<string[]>;
     internal: {
-        id: {minfin?: number};
+        id: { minfin?: number };
         link: BySource<string>;
     };
 }
 
 export type Ratings = Record<string, Record<string, string>>;
-
-export type DbfRow = Array<string | number | null>;
 
 export interface RatingBank {
     id?: number;

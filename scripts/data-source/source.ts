@@ -9,13 +9,10 @@ import type Audit from './audit';
 import type {Bank, SourceBank, SourceBankMap} from '../model';
 
 class Source {
-    sources: Record<string, {getBanks(): Promise<SourceBank[]>}>;
+    sources: Record<string, { getBanks(): Promise<SourceBank[]> }>;
 
     constructor(audit: Audit) {
         this.sources = {
-            // TODO: remove DBF from UI
-            // DBF is not supported in browser and needs manual actions in node
-            // dbf: new SourceNbuDBF(),
             // TODO: introduce audit.newBranch() method so that each source will not need to care about uniqueness of item names being audited
             api: new SourceNbuAPI(audit),
             // TODO: fix the sources if possible

@@ -45,13 +45,3 @@ export interface AuditProgress {
     start: number;
     end: number;
 }
-
-export type DbfValue = string | number | boolean | null;
-export type DbfRecord = DbfValue[];
-
-export interface DbfField {
-    name: string;
-    type: string;
-    length: number;
-    decimalCount: number;
-}
