@@ -1,15 +1,20 @@
-import {useState} from 'react';
+import {type MouseEvent, useState} from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Person from '@mui/icons-material/Person';
 
-function UserMenu(props: any) {
-    const [anchorEl, setAnchorEl] = useState<any>(null);
-    const [userSelected, setUserSelected] = useState(props.selected);
+interface UserMenuProps {
+    selected: number;
+    onSelect: (index: number) => void;
+}
+
+function UserMenu({selected, onSelect}: UserMenuProps) {
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const [userSelected, setUserSelected] = useState(selected);
     const users = ['Користувач', 'Розробник'];
 
-    function handleClick(event: any) {
+    function handleClick(event: MouseEvent<HTMLButtonElement>) {
         setAnchorEl(event.currentTarget);
     }
 
@@ -20,7 +25,7 @@ function UserMenu(props: any) {
     function handleSelect(index: number) {
         setUserSelected(index);
         handleClose();
-        props.onSelect(index);
+        onSelect(index);
     }
 
     return (

@@ -1,92 +1,91 @@
-import {Component} from 'react';
+import {useEffect, useState} from 'react';
 import '../../App.css';
 import _ from 'lodash';
-import logs from '../../node/logs';
+import logs, {type LogRequest} from '../../node/logs';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-class PageLogs extends Component<any, any> {
-    maxNumber: number;
+const MAX_NUMBER = 3;
 
-    constructor(props: any) {
-        super(props);
-        this.maxNumber = 3;
-        this.state = {
-            files: [],
-            fileIndex: 0,
-            requests: []
-        };
-    }
+function logPath(file: string) {
+    return '/data-logs/' + file;
+}
 
-    logPath(file: string) {
-        return '/data-logs/' + file;
-    }
-
-    tryLog(number: number): any {
+async function probeLogs(): Promise<string[]> {
+    const files: string[] = [];
+    for (let number = 1; number <= MAX_NUMBER; number++) {
         const file = number + '.txt';
-        return fetch(this.logPath(file), {method: 'HEAD'}).then(response => {
-            if (response.status !== 404) {
-                this.setState({files: [...this.state.files, file]});
-                if (number < this.maxNumber) {
-                    return this.tryLog(number + 1);
-                }
+        const response = await fetch(logPath(file), {method: 'HEAD'});
+        if (response.status === 404) {
+            break;
+        }
+        files.push(file);
+    }
+    return files;
+}
+
+function formatTime(time: number) {
+    return new Date(time).toISOString().substr(11, 8);
+}
+
+function PageLogs() {
+    const [files, setFiles] = useState<string[]>([]);
+    const [fileIndex, setFileIndex] = useState(0);
+    const [requests, setRequests] = useState<LogRequest[]>([]);
+
+    const selectFile = (fileIndex: number, fileList: string[] = files) => {
+        setFileIndex(fileIndex);
+        fetch(logPath(fileList[fileIndex]))
+            .then(log => log.text())
+            .then(log => setRequests(logs.parse(log)));
+    };
+
+    useEffect(() => {
+        // TODO: use log delays to emulate requests, divide time in dev mode for ease of use
+        probeLogs().then(files => {
+            setFiles(files);
+            if (files.length) {
+                fetch(logPath(files[0]))
+                    .then(log => log.text())
+                    .then(log => setRequests(logs.parse(log)));
             }
         });
-    }
+    }, []);
 
-    selectFile(fileIndex: number) {
-        this.setState({fileIndex});
-        fetch(this.logPath(this.state.files[fileIndex]))
-            .then(log => log.text())
-            .then(log => this.setState({requests: logs.parse(log)}));
-    }
+    const totalTime = _.sumBy(requests, 'time');
 
-    componentDidMount() {
-        // TODO: use log delays to emulate requests, divide time in dev mode for ease of use
-        this.tryLog(1).then(() => this.state.files.length && this.selectFile(0));
-    }
-
-    render() {
-        const {fileIndex} = this.state;
-        const totalTime = _.sumBy(this.state.requests, 'time');
-
-        return (
-            <div>
-                <AppBar position="static">
-                    <Tabs value={fileIndex} onChange={(_event, fileIndex) => this.selectFile(fileIndex)}
-                          style={{backgroundColor: 'white', color: 'black'}}>
-                        {this.state.files.map((file: string) => (
-                            <Tab key={file} label={file}/>
-                        ))}
-                    </Tabs>
-                </AppBar>
-                <div style={{padding: 10}}>Сумарний час: {this.formatTime(totalTime)}</div>
-                <table className="request">
-                    <tbody>
-                    {this.state.requests.map((request: any, index: number) => (
-                        <tr key={index}>
-                            <td>{index}</td>
-                            <td>{request.url}</td>
-                            <td>{request.time}</td>
-                            <td>
-                                <div style={{
-                                    backgroundColor: 'skyblue',
-                                    width: Math.round(request.time / 5)
-                                }}>&nbsp;</div>
-                            </td>
-                        </tr>
+    return (
+        <div>
+            <AppBar position="static">
+                <Tabs value={fileIndex} onChange={(_event, fileIndex) => selectFile(fileIndex)}
+                      style={{backgroundColor: 'white', color: 'black'}}>
+                    {files.map(file => (
+                        <Tab key={file} label={file}/>
                     ))}
-                    </tbody>
-                </table>
+                </Tabs>
+            </AppBar>
+            <div style={{padding: 10}}>Сумарний час: {formatTime(totalTime)}</div>
+            <table className="request">
+                <tbody>
+                {requests.map((request, index) => (
+                    <tr key={index}>
+                        <td>{index}</td>
+                        <td>{request.url}</td>
+                        <td>{request.time}</td>
+                        <td>
+                            <div style={{
+                                backgroundColor: 'skyblue',
+                                width: Math.round(request.time / 5)
+                            }}>&nbsp;</div>
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
 
-            </div>
-        );
-    }
-
-    formatTime(time: number) {
-        return new Date(time).toISOString().substr(11, 8);
-    }
+        </div>
+    );
 }
 
 export default PageLogs;
