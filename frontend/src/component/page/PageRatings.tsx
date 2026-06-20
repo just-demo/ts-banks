@@ -10,6 +10,8 @@ import Utils from "../Utils";
 import ExternalLink from "../ExternalLink";
 import Search from "../Search";
 import ActiveIndicator from "../ActiveIndicator";
+import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import ChevronRight from "@mui/icons-material/ChevronRight";
 
 class PageRatings extends Component<any, any> {
     dates: any;
@@ -20,6 +22,7 @@ class PageRatings extends Component<any, any> {
         this.state = {
             scale: 1,
             bankSelected: null,
+            collapsedYears: {},
             banks: [],
             ratings: {}
         };
@@ -90,6 +93,9 @@ class PageRatings extends Component<any, any> {
         }).reverse();
 
         const datesByYear = _.groupBy(this.dates, (date: string) => date.split('-')[0]);
+        const years = Object.keys(datesByYear).sort().reverse();
+        const nVisibleColumns = years.reduce((n, year) =>
+            n + (this.state.collapsedYears[year] ? 1 : datesByYear[year].length), 0);
         const r = (
             <div>
                 <div style={{display: 'flex', justifyContent: 'center', padding: 5}}>
@@ -107,13 +113,24 @@ class PageRatings extends Component<any, any> {
                         <th style={{minWidth: 215}} rowSpan={2}>
                             <Search onChange={(search: string) => this.setState({search: search})}/>
                         </th>
-                        {Object.keys(datesByYear).sort().reverse().map(year => (
-                            <th key={year} colSpan={datesByYear[year].length}>{year}</th>
+                        {years.map(year => this.state.collapsedYears[year] ? (
+                            <th key={year} className="year-col-collapsed" title={'Розгорнути ' + year}
+                                onClick={() => this.toggleYear(year)}><ChevronRight fontSize="small"/></th>
+                        ) : (
+                            <th key={year} colSpan={datesByYear[year].length} className="year-header"
+                                title={'Згорнути ' + year} onClick={() => this.toggleYear(year)}>
+                                {year}<ChevronLeft fontSize="small" style={{verticalAlign: 'middle'}}/>
+                            </th>
                         ))}
                     </tr>
                     <tr>
-                        {this.dates.map((date: string) => (
-                            <th key={date}><ExternalLink url={this.getRatingSourceLink(date)} title={this.formatDayMonth(date)}/></th>
+                        {years.map(year => this.state.collapsedYears[year] ? (
+                            <th key={year} className="year-col-collapsed" title={'Розгорнути ' + year}
+                                onClick={() => this.toggleYear(year)}><span className="year-label-vertical">{year}</span></th>
+                        ) : (
+                            datesByYear[year].map((date: string) => (
+                                <th key={date}><ExternalLink url={this.getRatingSourceLink(date)} title={this.formatDayMonth(date)}/></th>
+                            ))
                         ))}
                     </tr>
                     {bankIds.map(bankId => (
@@ -122,13 +139,17 @@ class PageRatings extends Component<any, any> {
                                 <td style={{textAlign: 'center'}}><ActiveIndicator value={this.banks[bankId].active}/></td>
                                 <td style={{paddingLeft: 3}} title={Utils.ifExceeds(this.banks[bankId].name, 30)}><a
                                     href={this.banks[bankId].link}>{Utils.truncate(this.banks[bankId].name, 30)}</a></td>
-                                {this.dates.map((date: string) => (
-                                    <td key={date} className={this.classForCell(this.banks[bankId], date)}
-                                        style={this.styleForCell(this.state.ratings[date][bankId])}>
-                                        <div>
-                                            {this.state.ratings[date][bankId] || '-'}
-                                        </div>
-                                    </td>
+                                {years.map(year => this.state.collapsedYears[year] ? (
+                                    <td key={year} className="year-col-collapsed"/>
+                                ) : (
+                                    datesByYear[year].map((date: string) => (
+                                        <td key={date} className={this.classForCell(this.banks[bankId], date)}
+                                            style={this.styleForCell(this.state.ratings[date][bankId])}>
+                                            <div>
+                                                {this.state.ratings[date][bankId] || '-'}
+                                            </div>
+                                        </td>
+                                    ))
                                 ))}
                             </tr>
                             {bankId === this.state.bankSelected && (
@@ -139,7 +160,7 @@ class PageRatings extends Component<any, any> {
                                             <div key={name} title={Utils.ifExceeds(name, 23)}>{Utils.truncate(name, 23)}</div>
                                         ))}
                                     </td>
-                                    <td colSpan={this.dates.length} style={{padding: 20}}><Bank data={this.banks[bankId].data}/></td>
+                                    <td colSpan={nVisibleColumns} style={{padding: 20}}><Bank data={this.banks[bankId].data}/></td>
                                 </tr>
                             )}
                         </React.Fragment>
@@ -165,6 +186,10 @@ class PageRatings extends Component<any, any> {
 
     handleBankSelected(bankId: string) {
         this.setState({bankSelected: this.state.bankSelected === bankId ? null : bankId});
+    }
+
+    toggleYear(year: string) {
+        this.setState({collapsedYears: {...this.state.collapsedYears, [year]: !this.state.collapsedYears[year]}});
     }
 
     compare(a: any, b: any) {

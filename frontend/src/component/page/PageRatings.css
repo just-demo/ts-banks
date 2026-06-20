@@ -8,6 +8,31 @@ th {
   padding: 0 7px;
 }
 
+th.year-header {
+  cursor: pointer;
+}
+
+th.year-col-collapsed,
+td.year-col-collapsed {
+  width: 20px;
+  min-width: 20px;
+  max-width: 20px;
+  padding: 0;
+  overflow: hidden;
+  background-color: #eee;
+}
+
+th.year-col-collapsed {
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+th.year-col-collapsed .year-label-vertical {
+  writing-mode: vertical-rl;
+  font-size: 9px;
+  color: #666;
+}
+
 table.ratings > tbody > tr:not(.details):hover {
   cursor: pointer;
 }
