@@ -12,6 +12,8 @@ import Search from "../Search";
 import ActiveIndicator from "../ActiveIndicator";
 import ChevronLeft from "@mui/icons-material/ChevronLeft";
 import ChevronRight from "@mui/icons-material/ChevronRight";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import type {Bank as BankData, Ratings, RatingBank} from "../../model";
 
 function getMostRelevantBankName(bank: BankData) {
@@ -68,6 +70,7 @@ function PageRatings() {
     const [banks, setBanks] = useState<BankData[]>([]);
     const [ratings, setRatings] = useState<Ratings>({});
     const [filterActive, setFilterActive] = useState(false);
+    const [perYear, setPerYear] = useState(false);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -167,13 +170,20 @@ function PageRatings() {
 
     const datesByYear = _.groupBy(dates, (date: string) => date.split('-')[0]);
     const years = Object.keys(datesByYear).sort().reverse();
+    const latestDateInYear = (year: string, bankId: string) =>
+        datesByYear[year].find(date => ratings[date][bankId]) ?? datesByYear[year][0];
     const nVisibleColumns = years.reduce((n, year) =>
-        n + (collapsedYears[year] ? 1 : datesByYear[year].length), 0);
+        n + (collapsedYears[year] ? 1 : perYear ? 1 : datesByYear[year].length), 0);
     return (
         <div>
-            <div style={{display: 'flex', justifyContent: 'center', padding: 5}}>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 5}}>
                     <Scale value={scale} values={[1, 2, 5, 10, 100]}
                            onChange={(scale: number) => setScale(scale)}/>
+                    <FormControlLabel
+                        control={<Checkbox checked={perYear}
+                                           onChange={event => setPerYear(event.target.checked)}
+                                           color="primary"/>}
+                        label="Рік"/>
             </div>
             <table className="ratings">
                 <tbody>
@@ -190,7 +200,7 @@ function PageRatings() {
                         <th key={year} className="year-col-collapsed" title={'Розгорнути ' + year}
                             onClick={() => toggleYear(year)}><ChevronRight fontSize="small"/></th>
                     ) : (
-                        <th key={year} colSpan={datesByYear[year].length} className="year-header"
+                        <th key={year} colSpan={perYear ? 1 : datesByYear[year].length} className="year-header"
                             title={'Згорнути ' + year} onClick={() => toggleYear(year)}>
                             {year}<ChevronLeft fontSize="small" style={{verticalAlign: 'middle'}}/>
                         </th>
@@ -200,6 +210,8 @@ function PageRatings() {
                     {years.map(year => collapsedYears[year] ? (
                         <th key={year} className="year-col-collapsed" title={'Розгорнути ' + year}
                             onClick={() => toggleYear(year)}><span className="year-label-vertical">{year}</span></th>
+                    ) : perYear ? (
+                        <th key={year}/>
                     ) : (
                         datesByYear[year].map((date: string) => (
                             <th key={date}><ExternalLink url={getRatingSourceLink(date)} title={formatDayMonth(date)}/></th>
@@ -214,7 +226,17 @@ function PageRatings() {
                                 href={undefined}>{Utils.truncate(banksById[bankId].name, 30)}</a></td>
                             {years.map(year => collapsedYears[year] ? (
                                 <td key={year} className="year-col-collapsed"/>
-                            ) : (
+                            ) : perYear ? (() => {
+                                const date = latestDateInYear(year, bankId);
+                                return (
+                                    <td key={year} className={classForCell(banksById[bankId], date)}
+                                        style={styleForCell(ratings[date][bankId])}>
+                                        <div>
+                                            {ratings[date][bankId] || '-'}
+                                        </div>
+                                    </td>
+                                );
+                            })() : (
                                 datesByYear[year].map((date: string) => (
                                     <td key={date} className={classForCell(banksById[bankId], date)}
                                         style={styleForCell(ratings[date][bankId])}>
