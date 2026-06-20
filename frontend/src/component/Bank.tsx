@@ -15,10 +15,6 @@ const source: Record<SourceKey, {name: string; link: (link?: string) => string}>
         name: 'НБУ API',
         link: () => 'https://bank.gov.ua/NBU_BankInfo/get_data_branch?typ=0'
     },
-    pdf: {
-        name: 'НБУ PDF',
-        link: link => 'https://bank.gov.ua' + (link || '/control/uk/publish/article?art_id=52047')
-    },
     fund: {
         name: 'ФГВФО',
         link: link => 'http://www.fg.gov.ua' + (link || '/uchasnyky-fondu')

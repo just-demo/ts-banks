@@ -1,4 +1,4 @@
-export type SourceKey = 'pdf' | 'api' | 'nbu' | 'fund' | 'minfin';
+export type SourceKey = 'api' | 'nbu' | 'fund' | 'minfin';
 
 export type BySource<T> = Partial<Record<SourceKey, T>>;
 

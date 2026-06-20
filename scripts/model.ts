@@ -13,7 +13,7 @@ export interface SourceBank {
     link?: string;
 }
 
-// Banks keyed by source type (api, nbu, pdf, fund, minfin, ...).
+// Banks keyed by source type (api, nbu, fund, minfin, ...).
 export type SourceBankMap = Record<string, SourceBank[]>;
 
 // A bank merged across all sources, as written to banks.json. Every field is a

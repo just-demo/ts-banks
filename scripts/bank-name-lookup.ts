@@ -20,6 +20,7 @@ class BankNameLookup {
         let nameGroups = _.flatten(Object.values(bankMap)).map(bank => bank.names);
         nameGroups.push(...DEFAULT_NAMES);
         nameGroups = nameGroups.map(names => _.sortBy(names, 'length'));
+        // TODO: is this comment still relevant?
         // Do not sort final groups because we should make sure PDF groups go last (there is implicit dependency on bankMap order),
         // otherwise merged/renamed banks from PDF source will override relevant names from other sources
         // nameGroups = nameGroups.map(names => buildVariants(names));

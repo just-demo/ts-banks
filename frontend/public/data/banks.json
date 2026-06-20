@@ -2557,17 +2557,13 @@
     "id": "КД",
     "name": {
       "api": "КД",
-      "fund": "КД",
-      "minfin": "КД"
+      "fund": "КД"
     },
     "names": {
       "api": [
         "КД"
       ],
       "fund": [
-        "КД"
-      ],
-      "minfin": [
         "КД"
       ]
     },
@@ -2583,7 +2579,27 @@
       "fund": [
         "https://clhs.com.ua",
         "www.clhs.com.ua"
-      ],
+      ]
+    },
+    "internal": {
+      "id": {},
+      "link": {}
+    }
+  },
+  {
+    "id": "КД (РАНІШЕ БАНК КЛІРИНГОВИЙ ДІМ)",
+    "name": {
+      "minfin": "КД (РАНІШЕ БАНК КЛІРИНГОВИЙ ДІМ)"
+    },
+    "names": {
+      "minfin": [
+        "КД (РАНІШЕ БАНК КЛІРИНГОВИЙ ДІМ)"
+      ]
+    },
+    "active": {},
+    "dateOpen": {},
+    "dateIssue": {},
+    "site": {
       "minfin": [
         "https://clhs.com.ua/ua"
       ]
@@ -2593,7 +2609,7 @@
         "minfin": 146
       },
       "link": {
-        "minfin": "/ua/company/bankkd"
+        "minfin": "/ua/company/clearing-house"
       }
     }
   },

@@ -16,12 +16,6 @@ interface Source {
 
 const sources: Source[] = [
     {
-        type: 'pdf',
-        title: 'НБУ PDF',
-        href: 'https://bank.gov.ua/control/uk/publish/article?art_id=52047',
-        color: 'deeppink',
-    },
-    {
         type: 'api',
         title: 'НБУ API',
         href: 'https://bank.gov.ua/control/uk/publish/article?art_id=38441973&cat_id=38459171#get_data_branch',
@@ -59,7 +53,6 @@ function PageBanks() {
     const [filter, setFilter] = useState<Record<string, boolean>>({
         seagreen: true,
         royalblue: true,
-        deeppink: true,
         red: true,
         orange: true,
         yellow: true,

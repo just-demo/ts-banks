@@ -17,7 +17,6 @@ class Source {
             api: new SourceNbuAPI(audit),
             // TODO: fix the sources if possible
             // nbu: new SourceNbuUI(audit),
-            // pdf: new SourceNbuPDF(audit),
             fund: new SourceFund(audit),
             minfin: new SourceMinfin(audit)
         };

@@ -141,7 +141,8 @@ function PageRatings() {
             // site: (bank.site.minfin || [])[0],
             // link: bank.internal.link.minfin,
             dateOpen: projectDate(bank.dateOpen.api),
-            dateClosed: projectDate(bank.dateIssue.pdf),
+            // TODO: do need new source for this?
+            // dateClosed: projectDate(bank.dateIssue.pdf),
             dateIssueMin: projectDate(_.min(datesIssue)),
             dateIssueMax: projectDate(_.max(datesIssue)),
             active: _.every(Object.values(bank.active)),
