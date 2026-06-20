@@ -1,12 +1,26 @@
 import {useEffect, useState} from 'react';
 import '../../App.css';
 import _ from 'lodash';
-import logs, {type LogRequest} from '../../node/logs';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 const MAX_NUMBER = 3;
+
+interface LogRequest {
+    url: string;
+    time: number;
+}
+
+function parseLog(text: string): LogRequest[] {
+    const regex = /^GET (.*) (\d+)ms$/gm;
+    const requests: LogRequest[] = [];
+    let match;
+    while ((match = regex.exec(text))) {
+        requests.push({url: match[1], time: parseInt(match[2])});
+    }
+    return requests;
+}
 
 function logPath(file: string) {
     return '/data-logs/' + file;
@@ -38,7 +52,7 @@ function PageLogs() {
         setFileIndex(fileIndex);
         fetch(logPath(fileList[fileIndex]))
             .then(log => log.text())
-            .then(log => setRequests(logs.parse(log)));
+            .then(log => setRequests(parseLog(log)));
     };
 
     useEffect(() => {
@@ -48,7 +62,7 @@ function PageLogs() {
             if (files.length) {
                 fetch(logPath(files[0]))
                     .then(log => log.text())
-                    .then(log => setRequests(logs.parse(log)));
+                    .then(log => setRequests(parseLog(log)));
             }
         });
     }, []);
