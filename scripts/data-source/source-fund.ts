@@ -58,22 +58,24 @@ async function readActiveBanks(audit: Audit): Promise<any[]> {
     return banks;
 }
 
-// TODO: fix it https://www.fg.gov.ua/banki-v-upravlinni-fondu/banki-likvidovani-fondom and others
 async function readInactiveBanks(audit: Audit): Promise<any[]> {
-    audit.start('banks-not-paying');
-    const html = await cache.read('fund/banks-not-paying', 'http://www.fg.gov.ua/not-paying');
-    const banks = regex.findManyObjects(html, /<h3 class="item-title"><a href="(\/.+?\/.+?\/(\d+?)-.+?)">[\S\s]+?(.+?)<\/a>/g, {
-        link: 1,
-        id: 2,
-        name: 3
-    });
+    audit.start('banks-inactive');
+    const banks: any[] = [];
+    for (let page = 1; ; page++) {
+        const cards = parseInactiveCards(await cache.read(
+            'fund/banks-inactive/' + page,
+            'https://www.fg.gov.ua/banki-v-upravlinni-fondu?page=' + page));
+        if (!cards.length) {
+            break;
+        }
+        banks.push(...cards);
+    }
+    audit.end('banks-inactive');
 
-    audit.end('banks-not-paying');
     audit.start('bank', banks.length);
     return mapAsync(banks, async (bank: any) => {
-        const htmlBank = await cache.read('fund/banks/' + bank.id, 'http://www.fg.gov.ua' + bank.link);
-        const problems = regex.findManyValues(htmlBank, /<td[^>]*>Термін [^<]*<\/td>\s*<td[^>]*>[^<]*?(\d{2}\.\d{2}\.\d{4})[^<]*<\/td>/g)
-            .map(date => dates.format(date));
+        const htmlBank = await cache.read('fund/banks/' + bank.id, 'https://www.fg.gov.ua' + bank.link);
+        const problems = extractProblemDates(htmlBank);
         audit.end('bank');
         return {
             name: names.extractBankPureName(bank.name),
@@ -82,6 +84,19 @@ async function readInactiveBanks(audit: Audit): Promise<any[]> {
             active: false
         };
     });
+}
+
+function parseInactiveCards(html: string): any[] {
+    return regex.findManyObjects(html, /<a href="(?:https:\/\/www\.fg\.gov\.ua)?(\/banki-v-upravlinni-fondu\/[^"]+)" class="item">[\s\S]*?<div class="title">\s*([\s\S]*?)\s*<\/div>/g, {
+        link: 1,
+        name: 2
+    }).map((bank: any) => ({...bank, id: bank.link.split('/').pop()}));
+}
+
+function extractProblemDates(html: string): (string | null)[] {
+    return regex.findManyObjects(html, /<div class="title">\s*[^<]*(?:тимчасов|ліквідац)[^<]*<\/div>\s*<div class="value">([\s\S]*?)<\/div>/gi, {value: 1})
+        .flatMap((block: any) => regex.findManyValues(block.value, /(\d{2}\.\d{2}\.\d{4})/g))
+        .map(date => dates.format(date));
 }
 
 function extractBankPureSites(bankFullSite: string): string[] {
