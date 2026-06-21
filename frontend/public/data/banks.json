@@ -388,38 +388,12 @@
     }
   },
   {
-    "id": "ЄВРОПРОМБАНК",
-    "name": {
-      "minfin": "ЄВРОПРОМБАНК"
-    },
-    "names": {
-      "minfin": [
-        "ЄВРОПРОМБАНК"
-      ]
-    },
-    "active": {},
-    "dateOpen": {},
-    "dateIssue": {},
-    "site": {
-      "minfin": [
-        "https://europrombank.ua/"
-      ]
-    },
-    "internal": {
-      "id": {
-        "minfin": 94
-      },
-      "link": {
-        "minfin": "/ua/company/europrombank"
-      }
-    }
-  },
-  {
     "id": "ЄПБ",
     "name": {
       "api": "ЄПБ",
       "nbu": "ЄПБ",
-      "fund": "ЄПБ"
+      "fund": "ЄПБ",
+      "minfin": "ЄПБ"
     },
     "names": {
       "api": [
@@ -431,6 +405,9 @@
       ],
       "fund": [
         "ЄПБ"
+      ],
+      "minfin": [
+        "ЄВРОПРОМБАНК"
       ]
     },
     "active": {
@@ -446,14 +423,19 @@
     "site": {
       "fund": [
         "https://europrombank.ua"
+      ],
+      "minfin": [
+        "https://europrombank.ua/"
       ]
     },
     "internal": {
       "id": {
-        "nbu": 36061927
+        "nbu": 36061927,
+        "minfin": 94
       },
       "link": {
-        "nbu": "/ua/supervision/institutions/36061927"
+        "nbu": "/ua/supervision/institutions/36061927",
+        "minfin": "/ua/company/europrombank"
       }
     }
   },
@@ -927,7 +909,8 @@
     "name": {
       "api": "А-БАНК",
       "nbu": "А-БАНК",
-      "fund": "А-БАНК"
+      "fund": "А-БАНК",
+      "minfin": "А-БАНК"
     },
     "names": {
       "api": [
@@ -939,6 +922,9 @@
       ],
       "fund": [
         "А-БАНК"
+      ],
+      "minfin": [
+        "АБАНК"
       ]
     },
     "active": {
@@ -954,40 +940,18 @@
     "site": {
       "fund": [
         "https://a-bank.com.ua"
-      ]
-    },
-    "internal": {
-      "id": {
-        "nbu": 14360080
-      },
-      "link": {
-        "nbu": "/ua/supervision/institutions/14360080"
-      }
-    }
-  },
-  {
-    "id": "АБАНК",
-    "name": {
-      "minfin": "АБАНК"
-    },
-    "names": {
-      "minfin": [
-        "АБАНК"
-      ]
-    },
-    "active": {},
-    "dateOpen": {},
-    "dateIssue": {},
-    "site": {
+      ],
       "minfin": [
         "http://a-bank.com.ua"
       ]
     },
     "internal": {
       "id": {
+        "nbu": 14360080,
         "minfin": 229
       },
       "link": {
+        "nbu": "/ua/supervision/institutions/14360080",
         "minfin": "/ua/company/a-bank"
       }
     }
@@ -2411,7 +2375,8 @@
     "name": {
       "api": "ВСТ",
       "nbu": "ВСТ",
-      "fund": "ВСТ"
+      "fund": "ВСТ",
+      "minfin": "ВСТ"
     },
     "names": {
       "api": [
@@ -2422,6 +2387,9 @@
       ],
       "fund": [
         "ВСТ"
+      ],
+      "minfin": [
+        "ВСТ БАНК (БАНК ВОСТОК)"
       ]
     },
     "active": {
@@ -2437,40 +2405,18 @@
     "site": {
       "fund": [
         "http://vstbank.ua"
-      ]
-    },
-    "internal": {
-      "id": {
-        "nbu": 26237202
-      },
-      "link": {
-        "nbu": "/ua/supervision/institutions/26237202"
-      }
-    }
-  },
-  {
-    "id": "ВСТ БАНК (БАНК ВОСТОК)",
-    "name": {
-      "minfin": "ВСТ БАНК (БАНК ВОСТОК)"
-    },
-    "names": {
-      "minfin": [
-        "ВСТ БАНК (БАНК ВОСТОК)"
-      ]
-    },
-    "active": {},
-    "dateOpen": {},
-    "dateIssue": {},
-    "site": {
+      ],
       "minfin": [
         "https://vstbank.ua/"
       ]
     },
     "internal": {
       "id": {
+        "nbu": 26237202,
         "minfin": 18
       },
       "link": {
+        "nbu": "/ua/supervision/institutions/26237202",
         "minfin": "/ua/company/bank-vostok"
       }
     }
@@ -3551,7 +3497,8 @@
     "name": {
       "api": "КД",
       "nbu": "КД",
-      "fund": "КД"
+      "fund": "КД",
+      "minfin": "КД"
     },
     "names": {
       "api": [
@@ -3562,6 +3509,9 @@
       ],
       "fund": [
         "КД"
+      ],
+      "minfin": [
+        "КД (РАНІШЕ БАНК КЛІРИНГОВИЙ ДІМ)"
       ]
     },
     "active": {
@@ -3578,40 +3528,18 @@
       "fund": [
         "https://clhs.com.ua",
         "www.clhs.com.ua"
-      ]
-    },
-    "internal": {
-      "id": {
-        "nbu": 21665382
-      },
-      "link": {
-        "nbu": "/ua/supervision/institutions/21665382"
-      }
-    }
-  },
-  {
-    "id": "КД (РАНІШЕ БАНК КЛІРИНГОВИЙ ДІМ)",
-    "name": {
-      "minfin": "КД (РАНІШЕ БАНК КЛІРИНГОВИЙ ДІМ)"
-    },
-    "names": {
-      "minfin": [
-        "КД (РАНІШЕ БАНК КЛІРИНГОВИЙ ДІМ)"
-      ]
-    },
-    "active": {},
-    "dateOpen": {},
-    "dateIssue": {},
-    "site": {
+      ],
       "minfin": [
         "https://clhs.com.ua/ua"
       ]
     },
     "internal": {
       "id": {
+        "nbu": 21665382,
         "minfin": 146
       },
       "link": {
+        "nbu": "/ua/supervision/institutions/21665382",
         "minfin": "/ua/company/clearing-house"
       }
     }
@@ -9002,37 +8930,20 @@
   {
     "id": "ФОРТУНА-БАНК",
     "name": {
-      "fund": "ФОРТУНА-БАНК"
+      "fund": "ФОРТУНА-БАНК",
+      "minfin": "ФОРТУНА-БАНК"
     },
     "names": {
       "fund": [
         "ФОРТУНА-БАНК"
+      ],
+      "minfin": [
+        "ФОРТУНАБАНК"
       ]
     },
     "active": {
       "fund": false
     },
-    "dateOpen": {},
-    "dateIssue": {},
-    "site": {},
-    "internal": {
-      "id": {},
-      "link": {
-        "fund": "/banki-v-upravlinni-fondu/banki-likvidovani-fondom/at-fortuna-bank"
-      }
-    }
-  },
-  {
-    "id": "ФОРТУНАБАНК",
-    "name": {
-      "minfin": "ФОРТУНАБАНК"
-    },
-    "names": {
-      "minfin": [
-        "ФОРТУНАБАНК"
-      ]
-    },
-    "active": {},
     "dateOpen": {},
     "dateIssue": {},
     "site": {
@@ -9043,6 +8954,7 @@
         "minfin": 25
       },
       "link": {
+        "fund": "/banki-v-upravlinni-fondu/banki-likvidovani-fondom/at-fortuna-bank",
         "minfin": "/ua/company/fortuna-bank"
       }
     }
