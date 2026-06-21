@@ -18,8 +18,8 @@ class SourceNbuUI {
     // https://bank.gov.ua/ua/supervision/institutions
     async getBanks(): Promise<SourceBank[]> {
         const allBanks = await Promise.all([
-            readBanks(this.audit, 'active', 1, true),
-            readBanks(this.audit, 'inactive', 2, false)
+            readBanks(this.audit, true),
+            readBanks(this.audit, false)
         ]);
         const activeBanks = _.keyBy(allBanks[0], bank => bank.id!);
         const inactiveBanks = _.keyBy(allBanks[1], bank => bank.id!);
@@ -28,29 +28,30 @@ class SourceNbuUI {
             return activeBanks[id] || inactiveBanks[id];
         });
         banks.sort(names.compareNames);
-        return cache.write('nbu/banks', banks);
+        return cache.write('nbu/banks-ui', banks);
     }
 }
 
 export default SourceNbuUI;
 
-async function readBanks(audit: Audit, label: string, status: number, active: boolean): Promise<SourceBank[]> {
-    audit.start('banks/' + label);
+async function readBanks(audit: Audit, active: boolean): Promise<SourceBank[]> {
+    const status: number = active ? 1 : 2;
+    audit.start('banks/' + status);
     const banks: SourceBank[] = [];
     for (let page = 1; ; page++) {
-        const cards = splitCards(await readPage(label, status, page));
+        const cards = splitCards(await readPage(status, page));
         if (!cards.length) {
             break;
         }
         cards.forEach(card => banks.push(parseCard(card, active)));
     }
-    audit.end('banks/' + label);
+    audit.end('banks/' + status);
     return banks;
 }
 
-async function readPage(label: string, status: number, page: number): Promise<string> {
+async function readPage(status: number, page: number): Promise<string> {
     // The page ignores GET query params; search results come from a POST to /supervision/institutions1, this is how the page actually works that is why POST is used here
-    return cache.read(`nbu/banks/${label}/${page}`, 'https://bank.gov.ua/supervision/institutions1', {
+    return cache.read(`nbu/banks-ui/${status}/${page}`, 'https://bank.gov.ua/supervision/institutions1', {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
         body: `page=${page}&perPage=100&search=&status=${status}&type%5B%5D=1&uid=&suid=&date_from=&date_to=&fb_date_from=&fb_date_to=`

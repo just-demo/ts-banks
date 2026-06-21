@@ -13,7 +13,7 @@ const source: Record<SourceKey, {name: string; link: (link?: string) => string}>
     },
     api: {
         name: 'НБУ API',
-        link: () => 'https://bank.gov.ua/NBU_BankInfo/get_data_branch?typ=0'
+        link: () => 'https://bank.gov.ua/NBU_BankInfo/get_data_branch?typ=0&json'
     },
     fund: {
         name: 'ФГВФО',

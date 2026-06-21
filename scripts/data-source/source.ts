@@ -7,6 +7,7 @@ import SourceFund from './source-fund';
 import SourceMinfin from './source-minfin';
 import type Audit from './audit';
 import type {Bank, SourceBank, SourceBankMap} from '../model';
+import SourceNbuUI from "./source-nbu-ui.ts";
 
 class Source {
     sources: Record<string, { getBanks(): Promise<SourceBank[]> }>;
@@ -15,8 +16,7 @@ class Source {
         this.sources = {
             // TODO: introduce audit.newBranch() method so that each source will not need to care about uniqueness of item names being audited
             api: new SourceNbuAPI(audit),
-            // TODO: fix the sources if possible
-            // nbu: new SourceNbuUI(audit),
+            nbu: new SourceNbuUI(audit),
             fund: new SourceFund(audit),
             minfin: new SourceMinfin(audit)
         };
